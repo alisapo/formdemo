@@ -67,6 +67,16 @@ class Users extends React.Component {
       });
   }
 
+  handleFilter = (e) => {
+    this.setState({ filterBy: e.target.value.toLowerCase() });
+
+    const filtered = this.state.allUsers.filter(
+      user => user.username.indexOf(this.state.filterBy) >= 0
+    );
+
+    this.setState({ filteredUsers: filtered });
+  }
+
   render() {
     if (!this.props.auth) {
       return <Redirect to='/' />
