@@ -29,7 +29,53 @@ class LogIn extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  
+  handleData(e) {
+    const { name } = e.target;
+    const value = e.target.value;
+    const { form, err } = this.state;
+    let obj = {};
+
+    obj = {
+      ...form,
+      [name]: value
+    };
+
+    //save state and check data in fields
+    this.setState({ form: obj }, () => {
+      let errors = {};
+      const isErrors = dataValidation(name, value);
+      errors = {
+        ...err,
+        [name]: isErrors
+      };
+      this.setState({ err: errors });
+    });
+  }
+
+  // disabled/enabled submit button
+  getButton() {
+    const { form } = this.state;
+
+    if (
+      form.username
+      && form.password
+    ) return false;
+
+    return true;
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const { form, err } = this.state;
+    const errorsObj = validateForm(form, err, dataValidation);
+
+    if (Object.keys(errorsObj).length != 0) {
+      this.setState({ err: { ...err, ...errorsObj } });
+      return false;
+    };
+
+    this.setState({ submit: true });
+  }
 
   render() {
     const { form, err } = this.state;
