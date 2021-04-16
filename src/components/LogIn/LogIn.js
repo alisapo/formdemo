@@ -74,7 +74,41 @@ class LogIn extends React.Component {
       return false;
     };
 
-    this.setState({ submit: true });
+    this.setState({ submit: true }, () => {
+      const data = {
+        username: form.username,
+        password: form.password
+      };
+
+      fetch(loginUrl, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => {
+          if (res.status == 200) {
+            return res.json();
+          } else {
+            this.setState({ err: { enter: 'Error in username or password' } });
+          }
+        })
+        .then(res => {
+          this.props.setAuth(res.auth_token);
+          this.props.history.push('/users');
+        })
+        .catch(err => {
+          this.setState({
+            form: {
+              username: '',
+              password: ''
+            },
+            submit: false
+          });
+
+          console.log(err);
+        });
+    });
   }
 
   render() {
