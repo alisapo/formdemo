@@ -22,6 +22,31 @@ class Users extends React.Component {
     this.handleFilter = this.handleFilter.bind(this);
   }
 
+  componentDidMount() {
+    fetch(usersUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${this.props.auth}`
+      } 
+    })
+      .then(res => {
+        if (res.status == 200) {
+          return res.json();
+        } else {
+          console.log(res.statusText);
+        }
+      })
+      .then(res => {
+        this.setState({
+          allUsers: res
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render() {
     if (!this.props.auth) {
       return <Redirect to='/' />
