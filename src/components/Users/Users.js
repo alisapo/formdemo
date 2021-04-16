@@ -47,6 +47,26 @@ class Users extends React.Component {
       });
   }
 
+  logOut = (e) => {
+    e.preventDefault();
+
+    fetch(logoutUrl, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(res => {
+        if (res.status == 401) {
+          this.props.setAuth('');
+          this.props.history.push('/');
+        } else {
+          console.log(res.statusText);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render() {
     if (!this.props.auth) {
       return <Redirect to='/' />
