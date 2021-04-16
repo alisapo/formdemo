@@ -77,6 +77,22 @@ class Users extends React.Component {
     this.setState({ filteredUsers: filtered });
   }
 
+  handleSort = () => {
+    const { allUsers, sortBy } = this.state;
+
+    if (sortBy === 'asc') {
+      this.setState({
+        allUsers: allUsers.sort(compareFunc('desc')),
+        sortBy: 'desc'
+      })
+    } else {
+      this.setState({
+        allUsers: allUsers.sort(compareFunc('asc')),
+        sortBy: 'asc'
+      })
+    }
+  }
+
   render() {
     if (!this.props.auth) {
       return <Redirect to='/' />
